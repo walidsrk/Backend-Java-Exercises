@@ -1,0 +1,51 @@
+@baseUrl = http://localhost:8080/texts
+
+### View all texts : GET texts
+GET {{baseUrl}}
+
+
+### Add a text : POST texts
+POST {{baseUrl}}
+Content-Type: application/json
+
+{    
+    "content":"Star Wars: The Phantom Menace (Episode I)",
+    "level": "easy"
+}
+
+### Add another text : POST texts
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "content":"Star Wars: Episode 2",
+    "level": "hard"
+}
+
+### Update text with ID == 2 : PUT texts/{id}
+
+PUT {{baseUrl}}/2 
+Content-Type: application/json
+
+{
+    "content":"Star Wars: Episode 2",
+    "level": "medium"
+}
+
+### Delete the text with ID == 2 : DELETE texts/{id}
+DELETE {{baseUrl}}/2
+
+### Read text with ID == 1 : GET texts/{id}
+GET {{baseUrl}}/1
+
+### View all texts with level = easy : GET texts?level=easy
+GET {{baseUrl}}?level=easy
+
+### Add a text with dangerous content : POST texts
+POST {{baseUrl}}
+Content-Type: application/json
+
+{    
+    "content": "<img src='#' onerror='alert(66666)'>", 
+    "level": "easy"
+}
