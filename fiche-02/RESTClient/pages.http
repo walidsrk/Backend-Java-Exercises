@@ -1,0 +1,73 @@
+@baseUrl = http://localhost:8080/pages
+@baseAuthsUrl = http://localhost:8080/auths
+
+### Login with default user credentials : POST auths/login
+### Get the token from the response in token variable
+# @name loggedUser
+POST {{baseAuthsUrl}}/login
+Content-Type: application/json
+
+{
+    "login":"james",
+    "password":"password"
+}
+
+@token = {{loggedUser.response.body.token}}
+
+### Add a film (using token File Variable) : POST films
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+
+{    
+    "titre":"Star Wars: The Phantom Menace (Episode I)",
+    "contenu": "un deux trois",
+    "auteur": "{{loggedUser.response.body.user.id}}",
+    "url":"https://en.wikipedia.org/wiki/Star_Wars:_Episode_I_%E2%80%93_The_Phantom_Menace"
+}
+
+### Add another film (using loggedUser Request Variable directly) : POST films
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: {{loggedUser.response.body.token}}
+
+{
+    "titre":"Star Wars: Episode 2",
+    "contenu": "quatre cinq six",
+    "auteur": "{{loggedUser.response.body.user.id}}",
+    "url":"findIt.com"
+}
+
+### Update film with ID == 2 : PUT films/{id}
+
+PUT {{baseUrl}}/13
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "titre":"Star Wars: Episode 2",
+    "contenu": "666",
+    "auteur": "{{loggedUser.response.body.user.id}}",
+    "status": "published",
+    "url":"www.findIt.com"
+}
+
+### Delete the film with ID == 2 : DELETE films/{id}
+DELETE {{baseUrl}}/13
+Authorization: {{token}}
+
+### Read film with ID == 1 : GET films/{id}
+GET {{baseUrl}}/8
+Authorization: {{token}}
+
+### Add a film with dangerous content : POST films
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+
+{    
+    "titre": "<img src='#' onerror='alert(66666)'>", 
+    "contenu": "a b c d",
+    "auteur": "{{loggedUser.response.body.user.id}}", 
+    "url": "not.com"
+}

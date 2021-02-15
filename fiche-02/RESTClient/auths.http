@@ -1,0 +1,39 @@
+@baseUrl = http://localhost:8080/auths
+@baseUserUrl = http://localhost:8080/users
+
+
+### Create the default user : POST users/init 
+POST {{baseUserUrl}}/init
+Content-Type: application/json
+
+### Login with default user credentials : POST auths/login
+### Get a request variable : https://github.com/Huachao/vscode-restclient
+# @name loggedUser
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "login":"james",
+    "password":"password"
+}
+
+### Register john : POST auths/register
+### Get a request variable : https://github.com/Huachao/vscode-restclient
+# @name loggedUser
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+    "login":"john",
+    "password":"123"
+}
+
+### Login with John credentials : POST auths/login
+# @name loggedUser
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "login":"john",
+    "password":"123"
+}
