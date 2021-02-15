@@ -1,0 +1,29 @@
+@baseUrl = http://localhost:8080/users
+@baseAuthsUrl = http://localhost:8080/auths
+
+### Create the default user : POST /init 
+POST {{baseUrl}}/init
+Content-Type: application/json
+
+### Login with default user credentials : POST auths/login
+### Get a request variable : https://github.com/Huachao/vscode-restclient
+# @name loggedUser
+POST {{baseAuthsUrl}}/login
+Content-Type: application/json
+
+{
+    "login":"james",
+    "password":"password"
+}
+
+### Read default user (secure ressource) : GET users/me 
+#Note that we could use a variable such as : 
+#@token = {{loggedUser.response.body.token}}
+GET {{baseUrl}}/me
+Authorization: {{loggedUser.response.body.token}}
+
+
+
+### Read all users (secure ressource) : GET users
+GET {{baseUrl}}
+Authorization: {{loggedUser.response.body.token}}

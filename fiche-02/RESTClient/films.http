@@ -1,0 +1,80 @@
+@baseUrl = http://localhost:8080/films
+@baseAuthsUrl = http://localhost:8080/auths
+
+### Login with default user credentials : POST auths/login
+### Get the token from the response in token variable
+# @name loggedUser
+POST {{baseAuthsUrl}}/login
+Content-Type: application/json
+
+{
+    "login":"james",
+    "password":"password"
+}
+
+@token = {{loggedUser.response.body.token}}
+
+### View all films : GET films
+GET {{baseUrl}}
+Authorization: {{token}}
+
+### Add a film (using token File Variable) : POST films
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+
+{    
+    "title":"Star Wars: The Phantom Menace (Episode I)",
+    "duration": "136",
+    "budget": "115000000",
+    "link":"https://en.wikipedia.org/wiki/Star_Wars:_Episode_I_%E2%80%93_The_Phantom_Menace"
+}
+
+### Add another film (using loggedUser Request Variable directly) : POST films
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: {{loggedUser.response.body.token}}
+
+{
+    "title":"Star Wars: Episode 2",
+    "duration": "1",
+    "budget": "11",
+    "link":"findIt.com"
+}
+
+### Update film with ID == 2 : PUT films/{id}
+
+PUT {{baseUrl}}/2 
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "title":"Star Wars: Episode 2",
+    "duration": "666",
+    "budget": "666",
+    "link":"www.findIt.com"
+}
+
+### Delete the film with ID == 2 : DELETE films/{id}
+DELETE {{baseUrl}}/2
+Authorization: {{token}}
+
+### Read film with ID == 1 : GET films/{id}
+GET {{baseUrl}}/1
+Authorization: {{token}}
+
+### View all films with duration of minimum 120 minutes : GET films?minimumDuration=value
+GET {{baseUrl}}?minimum-duration=120
+Authorization: {{token}}
+
+### Add a film with dangerous content : POST films
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+
+{    
+    "title": "<img src='#' onerror='alert(66666)'>", 
+    "duration": 120,
+    "budget": 300, 
+    "link": "not.com"
+}
